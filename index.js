@@ -1,4 +1,35 @@
 $(function () {
+    axios.get(`/api/cart`).then((resp) => {
+        const products = resp.data.data //获取商品数据
+        const html = products.map((it) => {
+            return `        <div class="item">
+            <div class="check">
+              <input type="checkbox" class="checkItem" />
+            </div>
+            <div class="info">
+              <img
+                src="${it.productUrl}"
+                alt=""
+              />
+              <a href="">
+                ${it.productName}
+              </a>
+            </div>
+            <div class="price"><em>￥${it.unitPrice}</em></div>
+            <div class="num">
+              <a href="" class="decr">-</a>
+              <input type="text" value="1" class="txt" />
+              <a href="" class="incr">+</a>
+            </div>
+            <div class="sum"><em>￥${it.unitPrice}</em></div>
+            <div class="del">
+              <a href="">删除</a>
+            </div>
+          </div>`
+        }).join(``)
+        $(`.list`).html(html)
+
+        
     const checkAlls = $(`.checkAll`)
     const checkItems = $(`.checkItem`)
     //为每全选框注册change事件
@@ -83,8 +114,8 @@ $(function () {
         checkbox.prop(`checked`, false)
         checkAlls.prop(`checked`, false)
         const num = $(this)
-        .parents(`.item`)
-        .find(`input[type = text]`)
+            .parents(`.item`)
+            .find(`input[type = text]`)
         num.val(1)
         setTotal()
     })
@@ -111,5 +142,6 @@ $(function () {
     clearAll.click(function (e) {
         e.preventDefault()
         onDeleteAll()
+    })
     })
 })
